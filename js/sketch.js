@@ -76,7 +76,7 @@ var f_FontAwesome;
 
 var preload = function() {
    f_Roboto = loadFont('../assets/Roboto-Regular.ttf');
-   f_FontAwesome = loadFont('../assets/FontAwesome.otf');
+   f_FontAwesome = loadFont('../fonts/FontAwesome.otf');
 }
 
 var setup = function(){
