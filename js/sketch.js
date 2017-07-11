@@ -76,9 +76,14 @@ var onSRM;
 var f_Roboto;
 var f_FontAwesome;
 
+// logo
+
+var logo;
+
 var preload = function() {
    f_Roboto = loadFont('../assets/Roboto-Regular.ttf');
    f_FontAwesome = loadFont('../fonts/FontAwesome.otf');
+   logo = loadImage('../Bilder/SimLogo.png');
 }
 
 var setup = function(){
@@ -369,6 +374,7 @@ var leftTop = function(){
 	rect(0,0, width / 100 * 12, 224);
 
 	// logo
+	image(logo, 8, 32, 232 * 0.9, 80 * 0.9);
 
 	// controls
 	textAlign(CENTER);
