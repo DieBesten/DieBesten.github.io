@@ -374,7 +374,7 @@ var leftTop = function(){
 	rect(0,0, width / 100 * 12, 224);
 
 	// logo
-	image(logo, 8, 32, 232 * 0.9, 80 * 0.9);
+	image(logo, 12, 36, 232 * 0.7, 80 * 0.7);
 
 	// controls
 	textAlign(CENTER);
