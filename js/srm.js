@@ -81,33 +81,42 @@ class Srm{
 			case 1:
 				// YOGA
 				this.i_pro = 0;
-				this.i_stress -= 10;
+				this.i_stress = 100;
 				this.i_ablenkung = 0;
 				this.i_krankheitstage -= 15;
 				productivity = this.i_pro;
 				ablenkungFrequency = this.i_ablenkung;
+				SRMStressInfluence = this.i_stress;
 				break;
 			case 2:
-				// SPORT
-				this.i_pro += 10;
-				this.i_stress -= 15;
-				this.i_ablenkung = 0;
-				this.i_krankheitstage -= 15; // ?
+				// Autogenes Training
+				this.i_pro = 0;
+				this.i_stress = 100;
+				this.i_ablenkung = 0;			
+				productivity = this.i_pro;
+				ablenkungFrequency = this.i_ablenkung;
+				SRMStressInfluence = this.i_stress;
 				break;
 			case 3:
 				// SOCIAL MEDIA BLOCKING
 				this.i_pro = 95;
-				this.i_stress -= 10;
+				this.i_stress -= 1;
 				this.i_ablenkung -= 15;
 				this.i_krankheitstage -= 0;
 				this.i_ablenkungFrequency -= 100;
+				productivity = this.i_pro;
+				ablenkungFrequency = this.i_ablenkung;
+				SRMStressInfluence = this.i_stress;
 				break;
 			case 4:
 				// EMAIL BEGRENZUNG
-				this.i_pro -= 10;
-				this.i_stress -= 20;
-				this.i_ablenkung -= 30;
-				this.i_krankheitstage -= 0;
+				this.i_pro = 90;
+				this.i_stress = 20;
+				this.i_ablenkung = 0;
+				this.i_krankheitstage -= 0;				
+				productivity = this.i_pro;
+				ablenkungFrequency = this.i_ablenkung;
+				SRMStressInfluence = this.i_stress;
 				break;
 		}
 
@@ -302,7 +311,24 @@ class Srm{
 
 		} else {
 			if(mouseX > this.position.x + 16 && mouseX < this.position.x + this.duration - 16 && mouseY > this.position.y && mouseY < this.position.y + 112 && mouseIsPressed && this.done == false){
-				srmArray.push(new Srm(1, mouseX - 60, mouseY - 60, this.label, days));
+				var newSRMType;
+
+				switch(this.label){
+					case "Yoga": 
+						newSRMType = 1;
+						break;
+					case "Autogenes\nTraining":
+						newSRMType = 2;
+						break;
+					case "Social Media\nBlocking": 
+						newSRMType = 3;
+						break;
+					case "Mail Sperre":
+						newSRMType = 4;
+						break;
+				}
+
+				srmArray.push(new Srm(newSRMType, mouseX - 60, mouseY - 60, this.label, days));
 				for(var i = 0; i < srmStash.length; i++){
 					srmStash[i].done = true;
 				}

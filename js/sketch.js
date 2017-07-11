@@ -37,6 +37,8 @@ var wertDesMitarbeiters;
 var gehalt;
 var ablenkung;
 var ablenkungFrequency;
+var resetAblenkungFrequency;
+var SRMStressInfluence;
 
 // vom Tag vorher
 var oldStress;
@@ -128,6 +130,10 @@ var setup = function(){
 	ablenkung = 100; // Prozent
 	ablenkungFrequency = 20; // Durchschnitt in Minuten
 	oldStress = 0; // Prozent an Stress der vom vorherigen Tag mitgenommen wird
+
+	resetAblenkungFrequency = 20;
+
+	SRMStressInfluence = 0;
 
 	pxProMinute = w / 540; // Pixel
 	progress = ((currentTimeHours - 8) * pxProMinute * 60) + (currentTimeMinutes * pxProMinute);
@@ -444,7 +450,6 @@ var leftTop = function(){
 		if(mouseX > width / 100 * 8 && mouseX < width / 100 * 12 && mouseY > 212 && mouseY < 262){
 			// hover effect
 			fill(c_yellow);
-			console.log("RIGHT");
 			// on click
 			if(mouseIsPressed){
 				playing = true;
@@ -532,7 +537,6 @@ var rightSidebar = function(){
 var calcAblenkung = function(){
 	// Zufällige Ablenkung --> Wahrscheinlichkeit abhängig von ablenkungFrequency --> 1 : ablenkungFrequency
 	var newDistraction = round(random(0, ablenkungFrequency));
-	console.log(newDistraction);
 	// Wenn die aF 0 ist = keine Ablenkung
 	if(ablenkungFrequency == 0){
 		return ablenkung;
@@ -551,14 +555,25 @@ var calcAblenkung = function(){
 
 var calcStress = function(){
 	// Stress erhöht sich je länger der Tag geht, 200 ist das maximale Stresslevel
+
+	stress = (100) + ((currentTimeHours * 60 + currentTimeMinutes) / 20) + random(0,1) + (oldStress / 10);
+
 	if(stress < 200){
-		stress = 100 + ((currentTimeHours * 60 + currentTimeMinutes) / 20) + random(0,1) + (oldStress / 10);
 		if(stress > 200){
 			stress = 200;
 		}
 	} else {
 		stress = 200;
 	}
+
+	stress -= SRMStressInfluence;
+
+	/*
+	if(onSRM){
+		stress -= SRMStressInfluence;
+	}
+	*/
+
 	return stress;
 }
 
@@ -597,7 +612,9 @@ var calculation = function(){
 
 	for(var i = 0; i < srmArray.length; i++){
 		if(progress > srmArray[i].startTime * pxProMinute && progress < srmArray[i].endTime * pxProMinute && srmArray[i].day == days[currentDay-1] && onSRM == false){
-			srmArray[i].influence();
+			if(SRMcheck == false){
+				srmArray[i].influence();
+			}			
 			onSRM = true;
 			SRMcheck = true;
 		}
@@ -605,6 +622,15 @@ var calculation = function(){
 
 	if(SRMcheck == false){
 		onSRM = false;
+		if(ablenkungFrequency != resetAblenkungFrequency){
+			ablenkungFrequency = resetAblenkungFrequency;			
+		}
+		if(SRMStressInfluence > 0){
+			SRMStressInfluence -= 1;
+		}
+		if(SRMStressInfluence < 0){
+			SRMStressInfluence += 1;
+		}
 	}
 
 	// Kein negativer Stress
